@@ -4,8 +4,8 @@ enable_testing()
 
 add_executable(${PROJECT_NAME}_tests
         main.cpp
-#        basic.cpp
-        )
+        hello_world.cpp
+        env.h)
 
 target_link_libraries(${PROJECT_NAME}_tests ${CONAN_LIBS})
 
