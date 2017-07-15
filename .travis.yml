@@ -9,4 +9,4 @@ before_install:
   - docker ps -a
 
 script:
-  - docker run boilerplate_luna_api /bin/sh -c "cd /app/bin; ./boilerplate_luna_api_tests"
+  - docker exec $(docker ps -lq) /bin/sh -c "/app/bin/boilerplate_luna_api_tests"
