@@ -8,5 +8,7 @@ RUN conan --version
 RUN conan install --build=missing
 RUN cmake .
 RUN cmake --build .
-ENV PORT 4567
-EXPOSE 4567
+ENV PORT 80
+EXPOSE 80
+WORKDIR /app/bin
+CMD ./boilerplate_luna_api

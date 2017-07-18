@@ -2,5 +2,23 @@
 // Created by Don Goodman-Wilson on 08/07/2017.
 //
 
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+#define CATCH_CONFIG_RUNNER
 #include <catch.hpp>
+
+std::string hostname{"http://localhost"};
+
+int main( int argc, char* argv[] )
+{
+    if (auto port = std::getenv("PORT"))
+    {
+        hostname = hostname + ":" + port;
+    }
+    else
+    {
+        hostname = hostname + ":8080";
+    }
+
+    int result = Catch::Session().run( argc, argv );
+
+    return ( result < 0xff ? result : 0xff );
+}
