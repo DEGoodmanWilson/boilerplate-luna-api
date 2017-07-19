@@ -15,7 +15,7 @@ controller hello_world{
         {
             return {200,
                     nlohmann::json{
-                            {"result", "Hello world!"}
+                            {"result", "Hello, world!"}
                     }.dump()
             };
         }

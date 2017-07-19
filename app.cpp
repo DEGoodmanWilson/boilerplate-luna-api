@@ -2,6 +2,7 @@
 // Created by Don Goodman-Wilson on 14/07/2017.
 //
 
+#include <unistd.h>
 #include <luna/luna.h>
 #include <json.hpp>
 #include "app.h"
@@ -32,14 +33,38 @@ void add_route(std::string &&base, const controller& controller)
 {
     if(!server) return;
 
-    auto path = base + controller.path;
+    base += controller.path;
 
-    if(path[path.size()-1] == '/')
+    if(base[base.size()-1] == '/')
     {
-        path = path.substr(0, path.size()-1);
+        base = base.substr(0, base.size()-1);
     }
 
-    server->handle_request(controller.method, path, controller.handler);
+    server->handle_request(controller.method, std::move(base), controller.handler);
+}
+
+void add_route(std::string &&base, std::string &&folder)
+{
+    if(base[base.size()-1] != '/')
+    {
+        base = base + "/"; // TODO this needs to be fixed in Luna itself.
+    }
+
+    if(folder[0] != '/')
+    {
+        base = "/" + base;
+    }
+
+    // we presuppose that this is being run from the folder that contains the static assets to serve
+    static std::string cwd{getcwd(nullptr, 0)};
+    if (auto asset_path = std::getenv("STATIC_ASSET_PATH"))
+    {
+        cwd = asset_path;
+    }
+
+    std::cout << cwd+folder << std::endl;
+
+    server->serve_files(std::move(base), cwd+folder);
 }
 
 void await()

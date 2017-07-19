@@ -10,5 +10,5 @@ RUN cmake .
 RUN cmake --build .
 ENV PORT 80
 EXPOSE 80
-WORKDIR /app/bin
-CMD ./boilerplate_luna_api
+WORKDIR /app
+CMD ./bin/boilerplate_luna_api
