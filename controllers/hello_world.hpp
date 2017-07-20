@@ -4,7 +4,7 @@
 
 #include <luna/luna.h>
 #include <json.hpp>
-#include "controller.h"
+#include "controller.hpp"
 
 #pragma once
 

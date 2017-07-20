@@ -5,7 +5,7 @@
 #include <catch.hpp>
 #include <cpr/cpr.h>
 #include <json.hpp>
-#include "env.h"
+#include "env.hpp"
 
 TEST_CASE("Check for assets folder")
 {

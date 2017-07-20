@@ -2,7 +2,7 @@
 // Created by Don Goodman-Wilson on 14/07/2017.
 //
 
-#include "logger.h"
+#include "logger.hpp"
 
 // Keep it simple for now
 #include <iostream>

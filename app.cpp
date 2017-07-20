@@ -5,28 +5,31 @@
 #include <unistd.h>
 #include <luna/luna.h>
 #include <json.hpp>
-#include "app.h"
+#include "logger.hpp"
+#include "app.hpp"
 
 namespace app
 {
 
 static std::unique_ptr<luna::server> server;
 
-std::tuple<bool, std::string> launch(uint16_t port)
+bool launch(uint16_t port)
 {
     server = std::make_unique<luna::server>(luna::server::port{port}, luna::server::use_epoll_if_available{true});
 
     if(!server)
     {
-        return std::make_tuple(false, "Failed to allocate webserver.");
+        error_logger(luna::log_level::FATAL, "Failed to allocate webserver.");
+        return false;
     }
 
     if (!static_cast<bool>(*server))
     {
-        return std::make_tuple(false, "Failed to stand up webserver.");
+        error_logger(luna::log_level::FATAL, "Failed to stand up webserver.");
+        return false;
     }
 
-    return std::make_tuple(true, "");
+    return true;
 }
 
 void add_route(std::string &&base, const controller& controller)
