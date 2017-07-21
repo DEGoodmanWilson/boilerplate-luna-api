@@ -15,7 +15,20 @@ int main()
     auto port = 8080;
     if (auto port_str = std::getenv("PORT"))
     {
-        port = atoi(port_str);
+        try
+        {
+            port = std::atoi(port_str);
+        }
+        catch (const std::invalid_argument &e)
+        {
+            error_logger(luna::log_level::FATAL, "Invalid port specified in env $PORT.");
+            return 1;
+        }
+        catch (const std::out_of_range &e)
+        {
+            error_logger(luna::log_level::FATAL, "Port specified in env $PORT is too large.");
+            return 1;
+        }
     }
 
     // launch server
@@ -30,8 +43,8 @@ int main()
     // Here is an endpoint handled by a controller class, in controllers/hello_world.h
     app::add_route("/hello_world", hello_world);
 
-    // Here is an endpoint for serving static files. Any request to "/assets/foobar" will look in the folder "assets" for a file called "foobar"
-    app::add_route("/assets", "/assets");
+    // Here is an endpoint for serving static files. Any request to "/foobar.html" will look in the folder "assets" for a file called "foobar.html"
+    app::add_route("/", "assets");
 
     // yield to server
     app::await();

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(PROJECT_NAME boilerplate_luna_api)
+set(PROJECT_NAME tsukimi)
 
 project(${PROJECT_NAME})
 

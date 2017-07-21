@@ -9,7 +9,7 @@
 namespace app
 {
 
-bool launch(uint16_t port);
+bool launch(int port);
 
 void add_route(std::string &&base, const controller& controller);
 void add_route(std::string &&base, std::string &&folder);

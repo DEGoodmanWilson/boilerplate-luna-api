@@ -13,9 +13,9 @@ namespace app
 
 static std::unique_ptr<luna::server> server;
 
-bool launch(uint16_t port)
+bool launch(int port)
 {
-    server = std::make_unique<luna::server>(luna::server::port{port}, luna::server::use_epoll_if_available{true});
+    server = std::make_unique<luna::server>(luna::server::port{port}, luna::server::use_thread_per_connection{true});
 
     if(!server)
     {
@@ -46,24 +46,26 @@ void add_route(std::string &&base, const controller& controller)
     server->handle_request(controller.method, std::move(base), controller.handler);
 }
 
+std::string get_path_to_serve_files_from()
+{
+    std::string cwd{getcwd(nullptr, 0)};
+    if (auto asset_path = std::getenv("STATIC_ASSET_PATH"))
+    {
+        cwd = asset_path;
+    }
+    return cwd;
+}
+
 void add_route(std::string &&base, std::string &&folder)
 {
+    // we require a trailing '/' for the filesystem folder containing our static assets
     if(base[base.size()-1] != '/')
     {
         base = base + "/"; // TODO this needs to be fixed in Luna itself.
     }
 
-    if(folder[0] != '/')
-    {
-        base = "/" + base;
-    }
-
     // we presuppose that this is being run from the folder that contains the static assets to serve
-    static std::string cwd{getcwd(nullptr, 0)};
-    if (auto asset_path = std::getenv("STATIC_ASSET_PATH"))
-    {
-        cwd = asset_path;
-    }
+    static std::string cwd{get_path_to_serve_files_from()};
 
     std::cout << cwd+folder << std::endl;
 
